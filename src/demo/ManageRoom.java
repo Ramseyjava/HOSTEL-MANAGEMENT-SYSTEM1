@@ -12,6 +12,9 @@ import javax.swing.JSeparator;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+
+import com.mysql.cj.protocol.Resultset;
+
 import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -20,18 +23,25 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.awt.event.ActionEvent;
 import javax.swing.border.CompoundBorder;
+import javax.swing.border.TitledBorder;
+
 import java.awt.Color;
 import java.awt.Font;
+import javax.swing.JPanel;
+import javax.swing.ImageIcon;
 
 public class ManageRoom {
 
 	public JFrame frmManageRoom;
 	private JTextField JTextRoom;
-	private JTextField textField_1;
 	private JTable tblRoom;
 	private JCheckBox box1;
 	private JCheckBox box2;
 	String activated,activate,RoomStatus;
+	private JTextField fldstatus;
+	String Room_number;
+	String BOOKED;
+	private JTextField textField_1;
 
 	/**
 	 * Launch the application.
@@ -107,39 +117,48 @@ public class ManageRoom {
 					con=Connector.getConnection();
 					String sql1="select * from manage_room where room_no=?";
 					pst=con.prepareStatement(sql1);
+					pst.setString(1, JTextRoom.getText());
 					ResultSet rs = pst.executeQuery();
 					if(rs.next()) {
-						if(rs.getString('1').equals(JTextRoom.getText()));
+						if(rs.getString(1).equals(JTextRoom.getText()));
 						{
-							JOptionPane.showMessageDialog(null, "Room_NO already exit in the System"+"\n"+"Please try Again!");
-						} 
-							
-					}else {
-						{
-							String sql="insert into manage_room values(?,?)";
-							PreparedStatement ps= con.prepareStatement(sql);
-							while(rs.next())
-							{
-								ps.setString(1, room_no);
-								ps.setString(2, RoomStatus);
-								ps.setString(3, activate);
-								ps.executeUpdate();
+							JOptionPane.showMessageDialog(null, "Room_NO already exit in the System"+"\n"+"Please try Again!",room_no, JOptionPane.WARNING_MESSAGE);
+						JTextRoom.setText(null);
+							JTextRoom.setRequestFocusEnabled(true);
+						} 	
+				}else {
+
+					con= Connector.getConnection();
+					String sql="insert into manage_room(room_no,RoomStatus,activate)values(?,?,?)";
+					PreparedStatement ps= con.prepareStatement(sql);
+						ps.setString(1, room_no);
+						ps.setString(2, RoomStatus);
+						ps.setString(3, activate);
+//						ps.executeUpdate();
+						int i=ps.executeUpdate();
+						if(i>0) {
+							tableshow();
+							JOptionPane.showMessageDialog(null, "Succefull inserted!!!welcome");
+							tblRoom.setSelectionBackground(Color.blue);
+							JTextRoom.setText(null);
+							JTextRoom.setRequestFocusEnabled(true);
+							textField_1.requestFocus();
+						tblRoom.clearSelection();
+						}else {JOptionPane.showInputDialog(null, room_no);
 							}
-						}
-					}
+				}
 					
 				}catch(Exception e) {
 					System.out.println("Error" + e);
 				}
-				tableshow();
-//				clear();
+	
 			}
 			
 		});
 		btnSave.setBounds(548, 73, 85, 25);
 		frmManageRoom.getContentPane().add(btnSave);
 		
-		JButton btnExit = new JButton("");
+		JButton btnExit = new JButton("EXIT");
 		btnExit.setBackground(Color.RED);
 		btnExit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -147,6 +166,8 @@ public class ManageRoom {
 				if(a==0)
 				{
 					frmManageRoom.setVisible(false);
+					DASHBOARD BB= new DASHBOARD();
+					
 				}
 			}
 		});
@@ -168,12 +189,6 @@ public class ManageRoom {
 		lblRoomNumber.setBounds(32, 153, 99, 15);
 		frmManageRoom.getContentPane().add(lblRoomNumber);
 		
-		textField_1 = new JTextField();
-		textField_1.setForeground(Color.BLACK);
-		textField_1.setBounds(167, 151, 114, 19);
-		frmManageRoom.getContentPane().add(textField_1);
-		textField_1.setColumns(10);
-		
 		JButton btnSearch = new JButton("Search");
 		btnSearch.addActionListener(object->{
 			String Room_number = textField_1.getText();
@@ -185,8 +200,35 @@ public class ManageRoom {
 			st = con.createStatement();
 			ResultSet rs = st.executeQuery("select * from manage_room where room_no= "+Room_number);
 			if(rs.next())
-			
 			{
+				
+				i=1;
+				if(rs.getString(3).equals("BOOKED")){
+					JOptionPane.showMessageDialog(null, "This Room is Booked!!");
+					textField_1.setText(null);
+					textField_1.setEditable(false);
+					textField_1.requestFocus();
+					tblRoom.clearSelection();
+					tblRoom.setEditingColumn(0);
+					fldstatus.setText(null);
+					fldstatus.setSelectedTextColor(Color.blue);
+					DefaultTableModel tb = (DefaultTableModel)tblRoom.getModel();
+					tb.setRowCount(0);
+			
+					
+				}else{
+					textField_1.setBackground(Color.pink);
+					if(rs.getString(2).equals("YES")) {
+						box2.setSelected(true);
+						
+					}else {
+						box2.setSelected(false);
+						
+					}
+				}
+					
+				
+				fldstatus.setText(rs.getString(3));
 			DefaultTableModel tb = (DefaultTableModel)tblRoom.getModel();
 			tb.setRowCount(0);
 			Object Row[];
@@ -196,13 +238,17 @@ public class ManageRoom {
 			Row[2]=rs.getString(3);
 			Row[3]=rs.getString(4);
 			tb.addRow(Row);
+			
+			textField_1.setText(null);
+			textField_1.setRequestFocusEnabled(true);
 			}
 			else
 			{
 				JOptionPane.showMessageDialog(null, "The Room Number Does not Exist!!");
-				tableshow();
+				textField_1.setText(null);
 				box1.setSelected(false);
 				textField_1.setRequestFocusEnabled(true);
+				tblRoom.clearSelection();
 		
 			}
 		}catch(Exception e) {
@@ -220,52 +266,14 @@ public class ManageRoom {
 	   box2 = new JCheckBox();
 		box2.addActionListener(object->{
 			if(box2.isSelected()) {
-				activated = "yes";
+				activated = "YES";
 			}
 			else {
-				activated =  "no";
+				activated =  "NO";
 			}
 		});
 		box2.setBounds(573, 149, 71, 23);
 		frmManageRoom.getContentPane().add(box2);
-		
-		JButton btnUpdate = new JButton("Update");
-		btnUpdate.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				String Room_number = textField_1.getText();
-				if(box2.isSelected())
-				{
-					activated ="Yes";
-				}else
-				{
-					activated ="No";
-				}
-				try {
-					Connection conn = Connector.getConnection();
-					  PreparedStatement ps = conn.prepareStatement("update manage_room set activate = ?,RoomStatus=? where room_no=?");
-					  ps.setString(1, activated);
-					  ps.setString(2,"BOOKED" );
-					  ps.setInt(3, Integer.parseInt(Room_number));
-					  ps.execute();
-					JOptionPane.showMessageDialog(null, "Succefull update!!");
-					textField_1.setText("");
-					textField_1.requestFocus();
-					box2.isSelected();
-					tableshow();
-					textField_1.requestFocus();
-//					
-				}catch(SQLException | ClassNotFoundException e) {
-					System.out.println(""+e.getStackTrace());
-					textField_1.requestFocus();
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		});
-		btnUpdate.setBackground(Color.YELLOW);
-		btnUpdate.setBounds(456, 178, 98, 25);
-		frmManageRoom.getContentPane().add(btnUpdate);
 		
 		JButton btnDelete = new JButton("Delete");
 		btnDelete.addActionListener(object->{
@@ -275,13 +283,22 @@ public class ManageRoom {
 				Connection conn = Connector.getConnection();
 				Statement st = conn.createStatement();
 				st.executeUpdate("delete from manage_room where room_no= '"+Room_number+"'");
-				tableshow();
+				int i=st.executeUpdate(Room_number);
 //				clear();
-				JOptionPane.showMessageDialog(null, "Succefull Deleted!!");
-				textField_1.setText("");
-				textField_1.requestFocus();
-				tableshow();
-//				clear();
+				if(i>0) {
+					tableshow();
+					textField_1.setText("");
+					JOptionPane.showMessageDialog(null, "Succefull Deleted!!",Room_number, JOptionPane.YES_NO_OPTION);
+					
+					textField_1.requestFocus();
+					tblRoom.clearSelection();
+				}else {
+					JOptionPane.showMessageDialog(null, "error occured while Delecting");
+				}
+					
+					
+					clear();
+				
 			}catch(Exception e) {}
 		});
 		btnDelete.setBackground(Color.RED);
@@ -290,11 +307,11 @@ public class ManageRoom {
 		
 		JSeparator separator_1 = new JSeparator();
 		separator_1.setBackground(Color.BLUE);
-		separator_1.setBounds(12, 223, 679, 20);
+		separator_1.setBounds(24, 215, 679, 20);
 		frmManageRoom.getContentPane().add(separator_1);
 		
 		JLabel lblAllRooms = new JLabel("ALL ROOMS");
-		lblAllRooms.setBounds(183, 220, 141, 23);
+		lblAllRooms.setBounds(33, 226, 141, 23);
 		frmManageRoom.getContentPane().add(lblAllRooms);
 		
 		String[] names =new String[] {
@@ -316,13 +333,67 @@ public class ManageRoom {
 				"id", "room_no", "Roomstatus", "activate"
 			}
 		));
-		tblRoom.setBounds(70, 255, 480, 141);
+		tblRoom.setBounds(12, 261, 480, 141);
 		frmManageRoom.getContentPane().add(tblRoom);
 		
 		JLabel lblStatus = new JLabel("status");
-		lblStatus.setBounds(456, 223, 70, 15);
+		lblStatus.setBounds(255, 230, 70, 15);
 		frmManageRoom.getContentPane().add(lblStatus);
 		
+		JPanel panel = new JPanel();
+		panel.setBorder(new TitledBorder(null,"Toilets/Stores", TitledBorder.LEADING, TitledBorder.TOP));
+		panel.setBounds(527, 230, 176, 177);
+		frmManageRoom.getContentPane().add(panel);
+		panel.setLayout(null);
+		
+		JButton btnNewButton = new JButton("View");
+		btnNewButton.addActionListener(obj->{
+		washRoom wr= new washRoom();
+		wr.show();
+		frmManageRoom.setVisible(false);
+		});
+		btnNewButton.setForeground(Color.BLACK);
+		btnNewButton.setFont(new Font("FreeSerif", Font.BOLD | Font.ITALIC, 22));
+		btnNewButton.setBackground(Color.BLUE);
+		btnNewButton.setBounds(32, 46, 117, 50);
+		panel.add(btnNewButton);
+		
+		JLabel lblNewLabel_1 = new JLabel("New label");
+		lblNewLabel_1.setIcon(new ImageIcon("/home/ramsey/eclipse-workspace/HOSTLE MANAGEMENT SYSTEM/HOSTEL-MANAGEMENT SYSTEM1/icons/school2.jpeg"));
+		lblNewLabel_1.setBounds(12, 12, 152, 165);
+		panel.add(lblNewLabel_1);
+		
+		JLabel lblNewLabel_2 = new JLabel("STATUS");
+		lblNewLabel_2.setBounds(42, 180, 71, 44);
+		frmManageRoom.getContentPane().add(lblNewLabel_2);
+		
+		fldstatus = new JTextField();
+		fldstatus.setForeground(Color.BLACK);
+		fldstatus.setColumns(10);
+		fldstatus.setBounds(118, 182, 128, 32);
+		frmManageRoom.getContentPane().add(fldstatus);
+		
+		JButton btnUpdate = new JButton("update");
+		btnUpdate.addActionListener(obj->{
+
+		try {
+			update();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		});
+		btnUpdate.setBackground(Color.RED);
+		btnUpdate.setBounds(442, 178, 98, 40);
+		frmManageRoom.getContentPane().add(btnUpdate);
+		
+		textField_1 = new JTextField();
+		textField_1.setBounds(159, 138, 114, 34);
+		frmManageRoom.getContentPane().add(textField_1);
+		textField_1.setColumns(10);
 	}
 	public void show() {
 		frmManageRoom.setVisible(true);
@@ -359,5 +430,43 @@ public class ManageRoom {
 			
 		}catch(Exception e) {}
 	}
+	private void update()throws Exception, ClassNotFoundException{
+		 Room_number=textField_1.getText();
+		String RoomStatus="BOOKED";
+		int i=0;
+		if(box2.isSelected()) {
+			activate="YES";
+		}else
+		{
+			activate="NO";
+		}
+		
+		try {
+			Connection conn;
+			conn=Connector.getConnection();
+			
+PreparedStatement pst= conn.prepareStatement("Update manage_room set RoomStatus='"+RoomStatus+"',activate='"+activate+"' where room_no='007'");
 
+pst.setInt(3, Integer.parseInt(textField_1.getText()));
+//pst.setString(1, Room_number);
+
+		
+			int a=pst.executeUpdate();
+			if(a>0) {
+				JOptionPane.showMessageDialog(null, "succefully updated!!!");
+				tblRoom.clearSelection();
+				clear();
+			}else {
+				JOptionPane.showMessageDialog(null, "Unsuccefully updated!!!");
+				tblRoom.setToolTipText(null);
+				tblRoom.clearSelection();
+				
+			}
+		}catch(Exception e) {
+			System.out.println("error updating"+e.getMessage());
+			e.printStackTrace();
+			
+			textField_1.requestFocus();
+		}
+	}
 }

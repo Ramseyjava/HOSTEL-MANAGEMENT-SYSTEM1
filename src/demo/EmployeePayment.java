@@ -76,6 +76,7 @@ public class EmployeePayment {
 				if(a==0)
 				{
 					frmEmployeePayment.setVisible(false);
+					DASHBOARD GH=new DASHBOARD();
 				}
 			}
 		});
@@ -253,6 +254,8 @@ public class EmployeePayment {
 			textArea.setText(null);
 			fldId.setText(null);
 			fldRole.setText(null);
+			textArea.setText(null);
+			fldMobile.requestFocus();
 			
 		});
 		btnSave_1.setBounds(521, 453, 117, 35);
@@ -289,10 +292,25 @@ public class EmployeePayment {
 		int i =ps.executeUpdate();
 		if(i>0) {
 			JOptionPane.showMessageDialog(null, "Payment Succefull!....Welcome!");
+			fldMobile.setText(null);
+			fldName.setText(null);
+			fldId.setText(null);
+			fldRole.setText(null);
+			fldDate.setText(null);
+			fldAmount.setText(null);
+			fldMobile.requestFocus();
+			
 		}
 		else
 		{
 			JOptionPane.showMessageDialog(null, " error!!!...unsuccefull Payment Please Try Again!");
+			fldMobile.setText(null);
+			fldName.setText(null);
+			fldId.setText(null);
+			fldRole.setText(null);
+			fldDate.setText(null);
+			fldAmount.setText(null);
+			fldMobile.requestFocus();
 		}
 		
 	}catch(SQLException e) {
@@ -307,7 +325,7 @@ public class EmployeePayment {
 			Statement st = con.createStatement();
 			ResultSet rs = st.executeQuery("select * from Salary");
 			while(rs.next()) {
-			textArea.setText("NAME:"+"\t"+rs.getString(3)+"\n"   +"ID:"+"\t"+rs.getString(4)+"EMAIL:"+"\t"+rs.getString(5)+"\n"+"ROLE:"+"\t"+rs.getString(6)+"\n"+"DATE:"+"\t"+rs.getString(7)+"\n"+"AMOUNT:"+"\t"+rs.getString(8)+"\n"+"MOBILE:"+"\t"+rs.getString(2)+"");
+			textArea.setText("NAME:"+"\t"+rs.getString(3)+"\n"   +"ID:"+"\t"+rs.getString(4)+"\n"+"EMAIL Address:"+"\t"+rs.getString(5)+"\n"+"ROLE:"+"\t"+rs.getString(6)+"\n"+"DATE:"+"\t"+rs.getString(7)+"\n"+"AMOUNT:"+"\t"+rs.getString(8)+"\n"+"MOBILE:"+"\t"+rs.getString(2)+"");
 			
 				}
 		}catch(Exception e) {

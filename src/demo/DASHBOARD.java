@@ -153,7 +153,7 @@ public class DASHBOARD  {
 				}
 			}
 		});
-		btnExit.setBounds(748, 6, 85, 42);
+		btnExit.setBounds(748, 0, 85, 42);
 		frmDashboard.getContentPane().add(btnExit);
 		
 		JButton btnManageRoom = new JButton("MANAGE ROOM");
@@ -166,6 +166,7 @@ public class DASHBOARD  {
 //				btnc.setForeground(new Color(255,255,255));
 				ManageRoom mr = new ManageRoom();
 				mr.show();
+				frmDashboard.setVisible(false);
 			}
 		});
 		btnManageRoom.setBounds(12, 10, 200, 63);
@@ -190,8 +191,8 @@ public class DASHBOARD  {
 		frmDashboard.getContentPane().add(lblNewLabel_1);
 		
 		JLabel lblNewLabel = new JLabel("New label");
-		lblNewLabel.setIcon(new ImageIcon("/home/ramsey/eclipse-workspace/HOSTLE MANAGEMENT SYSTEM/HOSTEL MANAGEMENT SYSTEM/icons/background.png"));
-		lblNewLabel.setBounds(230, 47, 615, 438);
+		lblNewLabel.setIcon(new ImageIcon("/home/ramsey/eclipse-workspace/HOSTLE MANAGEMENT SYSTEM/HOSTEL-MANAGEMENT SYSTEM1/icons/background.png"));
+		lblNewLabel.setBounds(215, 6, 630, 479);
 		frmDashboard.getContentPane().add(lblNewLabel);
 		jFrame.setExtendedState(MAXIMIZED_BOTH);
 

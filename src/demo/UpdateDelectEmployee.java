@@ -106,6 +106,7 @@ public class UpdateDelectEmployee {
 				if(a==0)
 				{
 					update.setVisible(false);
+					DASHBOARD NV= new DASHBOARD();
 				}
 				//frmDashboard.setVisible(true);
 			}
@@ -158,6 +159,7 @@ public class UpdateDelectEmployee {
 				if(i>0) {
 					JOptionPane.showMessageDialog(null, "Succefull Updated!!");
 				clear();
+				textField.requestFocus();
 				}else
 				{
 					JOptionPane.showMessageDialog(null, "Error in occured Updating\n try again!!");

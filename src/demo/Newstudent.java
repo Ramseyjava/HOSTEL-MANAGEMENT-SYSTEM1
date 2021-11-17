@@ -5,6 +5,7 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.Action;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
@@ -20,6 +21,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JRadioButton;
 import javax.swing.JLabel;
+import javax.swing.JCheckBox;
 
 public class Newstudent {
 
@@ -32,18 +34,23 @@ public class Newstudent {
 	private JTextField room;
 	private JTextField admno;
 	private JTextField year;
+	private JRadioButton btnfemale ;
+	private JRadioButton btnmale ;
+	
 	String []status = {"Living","Leaved"};
 	String currentstatus;
 	String item ;
+	JLabel lblGender ;
     int id;
     int id1;
-    String Gender;
+    String gender;
 	JComboBox<?> comboBox;
 	/**
 	 * Create the application.
 	 */
 	public Newstudent() {
 		initialize();
+		ButtonGroup gb =new ButtonGroup();
 	}
 
 	/**
@@ -101,6 +108,14 @@ public class Newstudent {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
 					Insert();
+					mobile.setText(null);
+					student.setText(null);
+					parentname.setText(null);
+		            email.setText(null);
+		            idnumber.setText(null);
+		            room.setText(null);
+		            year.setText(null);
+		            admno.setText(null);
 				} catch (ClassNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -163,6 +178,7 @@ public class Newstudent {
 		frame2.getContentPane().add(btnExit);
 		
 		room = new JTextField();
+//		room=set.
 		room.setBounds(250, 267, 257, 30);
 		frame2.getContentPane().add(room);
 		room.setColumns(10);
@@ -197,68 +213,96 @@ public class Newstudent {
 		frame2.getContentPane().add(comboBox);
 		
 
-		JLabel Gender = new JLabel("Gender");
-		Gender.setFont(new Font("Dialog", Font.BOLD, 23));
-		Gender.setBackground(Color.MAGENTA);
-		Gender.setBounds(12, 469, 138, 36);
-		frame2.getContentPane().add(Gender);
+		 lblGender = new JLabel("Gender");
+		 lblGender.setFont(new Font("Dialog", Font.BOLD, 23));
+		 lblGender.setBackground(Color.MAGENTA);
+		 lblGender.setBounds(12, 469, 138, 36);
+		frame2.getContentPane().add(lblGender);
 		
-		JLabel Gender_1 = new JLabel("lIVING STATUS");
-		Gender_1.setFont(new Font("Dialog", Font.BOLD, 23));
-		Gender_1.setBackground(Color.MAGENTA);
-		Gender_1.setBounds(12, 412, 193, 36);
-		frame2.getContentPane().add(Gender_1);
+		JLabel lblstatus = new JLabel("lIVING STATUS");
+		lblstatus.setFont(new Font("Dialog", Font.BOLD, 23));
+		lblstatus.setBackground(Color.MAGENTA);
+		lblstatus.setBounds(12, 412, 193, 36);
+		frame2.getContentPane().add(lblstatus);
 		
-		JLabel Gender_2 = new JLabel("Year");
-		Gender_2.setFont(new Font("Dialog", Font.BOLD, 23));
-		Gender_2.setBackground(Color.MAGENTA);
-		Gender_2.setBounds(12, 358, 138, 36);
-		frame2.getContentPane().add(Gender_2);
+		JLabel lblyear = new JLabel("Year");
+		lblyear.setFont(new Font("Dialog", Font.BOLD, 23));
+		lblyear.setBackground(Color.MAGENTA);
+		lblyear.setBounds(12, 358, 138, 36);
+		frame2.getContentPane().add(lblyear);
 		
-		JLabel Gender_3 = new JLabel("ADM No");
-		Gender_3.setFont(new Font("Dialog", Font.BOLD, 23));
-		Gender_3.setBackground(Color.MAGENTA);
-		Gender_3.setBounds(12, 321, 138, 36);
-		frame2.getContentPane().add(Gender_3);
+		JLabel lbladm = new JLabel("ADM No");
+		lbladm.setFont(new Font("Dialog", Font.BOLD, 23));
+		lbladm.setBackground(Color.MAGENTA);
+		lbladm.setBounds(12, 321, 138, 36);
+		frame2.getContentPane().add(lbladm);
 		
-		JLabel Gender_4 = new JLabel("ROOM No");
-		Gender_4.setFont(new Font("Dialog", Font.BOLD, 23));
-		Gender_4.setBackground(Color.MAGENTA);
-		Gender_4.setBounds(12, 258, 138, 36);
-		frame2.getContentPane().add(Gender_4);
+		JLabel lblroom = new JLabel("ROOM No");
+		lblroom.setFont(new Font("Dialog", Font.BOLD, 23));
+		lblroom.setBackground(Color.MAGENTA);
+		lblroom.setBounds(12, 258, 138, 36);
+		frame2.getContentPane().add(lblroom);
 		
-		JLabel Gender_5 = new JLabel("STUDENT ID");
-		Gender_5.setFont(new Font("Dialog", Font.BOLD, 23));
-		Gender_5.setBackground(Color.MAGENTA);
-		Gender_5.setBounds(12, 207, 193, 36);
-		frame2.getContentPane().add(Gender_5);
+		JLabel lblid = new JLabel("STUDENT ID");
+		lblid.setFont(new Font("Dialog", Font.BOLD, 23));
+		lblid.setBackground(Color.MAGENTA);
+		lblid.setBounds(12, 207, 193, 36);
+		frame2.getContentPane().add(lblid);
 		
-		JLabel Gender_6 = new JLabel("Email Address");
-		Gender_6.setFont(new Font("Dialog", Font.BOLD, 23));
-		Gender_6.setBackground(Color.MAGENTA);
-		Gender_6.setBounds(12, 157, 200, 36);
-		frame2.getContentPane().add(Gender_6);
+		JLabel lblemail = new JLabel("Email Address");
+		lblemail.setFont(new Font("Dialog", Font.BOLD, 23));
+		lblemail.setBackground(Color.MAGENTA);
+		lblemail.setBounds(12, 157, 200, 36);
+		frame2.getContentPane().add(lblemail);
 		
-		JLabel Gender_7 = new JLabel("PARENT NAME");
-		Gender_7.setFont(new Font("Dialog", Font.BOLD, 23));
-		Gender_7.setBackground(Color.MAGENTA);
-		Gender_7.setBounds(12, 104, 193, 36);
-		frame2.getContentPane().add(Gender_7);
+		JLabel lblparent = new JLabel("PARENT NAME");
+		lblparent.setFont(new Font("Dialog", Font.BOLD, 23));
+		lblparent.setBackground(Color.MAGENTA);
+		lblparent.setBounds(12, 104, 193, 36);
+		frame2.getContentPane().add(lblparent);
 		
-		JLabel Gender_8 = new JLabel("STUDENT NAME");
-		Gender_8.setFont(new Font("Dialog", Font.BOLD, 23));
-		Gender_8.setBackground(Color.MAGENTA);
-		Gender_8.setBounds(12, 56, 220, 36);
-		frame2.getContentPane().add(Gender_8);
+		JLabel lblname = new JLabel("STUDENT NAME");
+		lblname.setFont(new Font("Dialog", Font.BOLD, 23));
+		lblname.setBackground(Color.MAGENTA);
+		lblname.setBounds(12, 56, 220, 36);
+		frame2.getContentPane().add(lblname);
+		
+		ButtonGroup gb =new ButtonGroup();
+		
+		
+		 btnmale = new JRadioButton("Male");
+		btnmale.addItemListener(v->{
+			gender="Male";
+			
+			gb.add(btnmale);
+		});
+		btnmale.setBounds(250, 487, 69, 35);
+		frame2.getContentPane().add(btnmale);
+		
+		 btnfemale = new JRadioButton("Female");
+		btnfemale.addItemListener(v->{
+			gender="Female";
+			gb.add(btnfemale);
+			
+//			btnfemale.setToggleGroup(gb);
+//			
+
+		});
+		btnfemale.setBounds(431, 483, 76, 43);
+		frame2.getContentPane().add(btnfemale);
 		frame2.setVisible(true);
 	}
 	private void Insert() throws Exception {
+
+//if(mobile.setMaximumSize(10)) {}
+	
 		id1 = comboBox.getSelectedIndex();
 		Connection conn;
 		PreparedStatement ps;
+		
 		try {
 			conn = Connector.getConnection();
-		String sql = "insert into Students (mobile,studentname,parent,email,idno,roomno,year,status,Gender) values(?,?,?,?,?,?,?,?,?)";
+		String sql = "insert into Students (mobile,studentname,parent,email,idno,roomno,year,status,gender,comment) values(?,?,?,?,?,?,?,?,?,?)";
 		ps = conn.prepareStatement(sql);
 		ps.setInt(1, Integer.parseInt(mobile.getText()));
 		ps.setString(2, student.getText());
@@ -268,7 +312,8 @@ public class Newstudent {
 		ps.setInt(6, Integer.parseInt(room.getText()));
 		ps.setString(7, year.getText());
 		ps.setString(8, comboBox.getItemAt(id)+"");
-		ps.setString(9, Gender);
+		ps.setString(9, gender);
+		ps.setString(10, "");
 		int i =ps.executeUpdate();
 		if(i>0) {
 			JOptionPane.showMessageDialog(null, "succefull inserted!");
@@ -282,4 +327,5 @@ public class Newstudent {
 		System.out.println(" insert student error"+ e);
 	}
 }
+	
 }

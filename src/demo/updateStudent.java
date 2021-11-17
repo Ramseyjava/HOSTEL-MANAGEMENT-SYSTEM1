@@ -31,6 +31,7 @@ public class updateStudent {
 	String []status;
 	private JTextField fldyear;
 	private JComboBox comboBox;
+	private JTextArea textArea;
 
 	/**
 	 * Create the application.
@@ -91,7 +92,7 @@ public class updateStudent {
 		btnEmail.setBounds(12, 167, 140, 28);
 		frmUpdateAndDelete.getContentPane().add(btnEmail);
 		
-		JButton btnAdm = new JButton("ADM No");
+		JButton btnAdm = new JButton("ID No");
 		btnAdm.setForeground(Color.BLACK);
 		btnAdm.setBackground(Color.MAGENTA);
 		btnAdm.setBounds(12, 219, 140, 28);
@@ -187,15 +188,16 @@ public class updateStudent {
 					while(rs.next())
 					{
 						fldMobile.setEditable(false);
-						fldName.setText(rs.getString(2));
-						fldParent.setText(rs.getString(3));
-						fldEmail.setText(rs.getString(4));
-						fldAdm.setText(rs.getString(5));
-						fldRoom.setText(rs.getString(6));
-						fldyear.setText(rs.getInt(7)+"");
+						
+						fldName.setText(rs.getString(3));
+						fldParent.setText(rs.getString(4));
+						fldEmail.setText(rs.getString(5));
+						fldAdm.setText(rs.getInt(6)+"");
+						fldRoom.setText(rs.getString(7));
+						fldyear.setText(rs.getInt(8)+"");
 					
 						//fldStatus.setEditable(false);
-						if(rs.getString(8).equals("living"))
+						if(rs.getString(9).equals("living"))
 						{
 							comboBox.addItem("Living");
 						//	fldStatus.setText("living");
@@ -205,10 +207,13 @@ public class updateStudent {
 						}
 
 					}
+					if( stm.executeQuery(mobile) != null) {
+						JOptionPane.showMessageDialog(null, "the Number does not Exict!!!");
+					}
 					
 				}catch(Exception e) 
 				{
-					JOptionPane.showMessageDialog(null, "");
+//					JOptionPane.showMessageDialog(null, "");
 					fldMobile.requestFocus();
 				}
 				
@@ -234,12 +239,21 @@ public class updateStudent {
 			String StudentName= fldName.getText();
 			String mobile = fldMobile.getText();
 		    String Status = comboBox.getItemAt(id)+"";
-		    pst= conn.prepareStatement("update Students set status ='living',roomno = ?,year = ? where mobile = "+fldMobile.getText());
-		    pst.setInt(6, Integer.parseInt(room));
+		    String comment=textArea.getText();
+		    pst= conn.prepareStatement("update Students set email=?, roomNo=?, year=?, status=? ,comment=? where mobile = "+fldMobile.getText());
+		    pst.setString(1, Email);
+		    pst.setString(2, room);
+		    pst.setInt(3, Integer.parseInt(fldyear.getText()));
+		    pst.setString(4, Status);
+		    pst.setString(5, comment);
+		    pst.executeUpdate();
+		
 		    int i=pst.executeUpdate();
 		    if(i>0) {
 		    	JOptionPane.showMessageDialog(null, "Succefull Updated!!");
 		    	clear();
+		    	textArea.setText(null);
+		    	textArea.requestFocus();
 		    }else
 		    {JOptionPane.showMessageDialog(null, "error UnSuccefull Update!!");}
 			
@@ -289,7 +303,7 @@ public class updateStudent {
 		lblCommentOnStudent.setBounds(468, 23, 220, 36);
 		frmUpdateAndDelete.getContentPane().add(lblCommentOnStudent);
 		
-		JTextArea textArea = new JTextArea();
+		textArea = new JTextArea();
 		textArea.setForeground(Color.WHITE);
 		textArea.setBackground(Color.BLACK);
 		textArea.setBounds(478, 60, 210, 327);
@@ -307,7 +321,7 @@ public class updateStudent {
     PreparedStatement ps;
     try {
     	con1 = Connector.getConnection();
-    	String sql = "insert into Students(mobile,studentname,parent,email,idno,room,livingStatus) VALUES(?,?,?,?,?,?,?)";
+    	String sql = "insert into Students(mobile,studentname,parent,email,idno,room,livingStatus,comment) VALUES(?,?,?,?,?,?,?,?)";
     	ps =con1.prepareStatement(sql);
     	ps.setInt(1, Integer.parseInt(fldMobile.getText()));
     	ps.setString(2, fldName.getText());
@@ -315,7 +329,7 @@ public class updateStudent {
     	ps.setString(4, fldEmail.getText());
     	ps.setString(6, fldAdm.getText());
     	ps.setString(7, fldRoom.getText());
-    	
+    	ps.setString(8, textArea.getText());
     	int i = ps.executeUpdate();
     	if(i>0) {
     		JOptionPane.showMessageDialog(null, "Succefull update");

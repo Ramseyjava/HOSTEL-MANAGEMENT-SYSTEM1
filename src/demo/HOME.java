@@ -1,39 +1,22 @@
 package demo;
 
 import java.awt.EventQueue;
-import java.awt.Window;
 
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPasswordField;
-//
-import javax.swing.JTextField;
-import javax.swing.JCheckBox;
-import javax.swing.JComponent;
-import javax.swing.JButton;
+import javax.swing.JTextArea;
+import java.awt.SystemColor;
 import java.awt.Color;
+import javax.swing.JLabel;
+import java.awt.Font;
+import javax.swing.JToggleButton;
+import javax.swing.JPanel;
 import java.awt.event.ActionListener;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.awt.event.ActionEvent;
 import javax.swing.ImageIcon;
-import java.awt.Font;
-//import java.beans.PropertyChangeListener;
-//import java.beans.PropertyChangeEvent;
-   public class HOME {
 
-	public JFrame frmLogin;
-	private JTextField textField;
-	public Connection conn;
-	public PreparedStatement ps;
-	private JPasswordField passwordField;
-	private JCheckBox check;
-	protected Object show;
-	private JLabel lblNewLabel;
+public class HOME{
+
+	private JFrame frmHome;
 
 	/**
 	 * Launch the application.
@@ -43,175 +26,93 @@ import java.awt.Font;
 			public void run() {
 				try {
 					HOME window = new HOME();
-					window.frmLogin.setVisible(true);
+					window.frmHome.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		});
 	}
-   
+
 	/**
 	 * Create the application.
 	 */
 	public HOME() {
 		initialize();
-		
 	}
 
 	/**
 	 * Initialize the contents of the frame.
-	 * @throws SQLException 
 	 */
-	
-protected void Get_Connection() throws SQLException {
-		
-	try {
-		String driver = "com.mysql.cj.jdbc.Driver";
-		String url = "jdbc:mysql://localhost:3306/Hostel";
-		String user = "root";
-		String password = "";
-		//register your driver
-		Class.forName(driver);
-		//create a connection
-		conn = DriverManager.getConnection(url, user, password);
-		//close connection	
-		
-		
-	} catch (ClassNotFoundException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
-	}
- 
-	private void Check() throws SQLException {
-		Get_Connection();
-//		String sql = "select username,password from users where username=? and password=?";
-		String sql="select * from users where username=? and password=?";
-		//create statement
-		 ps = conn.prepareStatement(sql);
-		 String adminname = textField.getText();
-		 String adminpass = passwordField.getText();
-		 
-		//execute statement
-		 ps.setString(1, adminname);
-		 ps.setString(2, adminpass);
-//		 ps.setString(3, kendi);
-//		 ps.setInt(4, 2021);
-		 ResultSet rs  = ps.executeQuery();
-		 if(rs.next()) {
-			 frmLogin.setVisible(false);
-//			 DASHBOARD dash = new DASHBOARD();
-//			 dash.show();
-				 
-				 String  role=rs.getString("role");
-				 String admin="super";
-				 System.out.print(admin + role);
-				 DASHBOARD ds=new DASHBOARD();
-				 ds.lblNewLabel_1.setText("WELCOME ADMIN "+textField.getText().toUpperCase());
-				 ds.show();
-				 if(role.contentEquals(admin)) {
-					 DASHBOARD dss=new DASHBOARD();
-					 dss.show();
-					 
-				 }
-				 else {
-				JOptionPane.showMessageDialog(null, "you are an admin");
-				 }
-		 }
-		 
-		else {
-		 JOptionPane.showMessageDialog(null, "username and password mismatch!!... try again");
-		 textField.setText("");
-		 passwordField.setText("");
-	 textField.requestFocus();
-		 }
-		 conn.close();
-	}
-	
-
-
 	private void initialize() {
-		frmLogin = new JFrame();
-		frmLogin.setTitle("LOGIN");
+		frmHome = new JFrame();
+		frmHome.getContentPane().setForeground(Color.GREEN);
+		frmHome.getContentPane().setBackground(SystemColor.desktop);
+		frmHome.setTitle("HOME");
+		frmHome.setBounds(100, 100, 804, 490);
+		frmHome.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmHome.getContentPane().setLayout(null);
 		
+		JTextArea txtrCoursesOffered = new JTextArea();
+		txtrCoursesOffered.setEditable(false);
+		txtrCoursesOffered.setFont(new Font("Courier 10 Pitch", Font.PLAIN, 15));
+		txtrCoursesOffered.setForeground(Color.GREEN);
+		txtrCoursesOffered.setText("RULES / REGULATIONS -->\n *MANAGEMENT*\n\t*ID REGESTRATION*\n\t*ADMIS*\n\t*TIME SHEDULE*\n\t*CLEANNESS*\n\t*SECURITY*\n\t*MAINTANACE OF HOSTEL TOOLS*\n\t*NO SMOKING *\n\t*NO STEALLING*\n\t*PAYMENTS SERVICES*");
+		txtrCoursesOffered.setBackground(SystemColor.menuText);
+		txtrCoursesOffered.setBounds(12, 75, 268, 381);
+		frmHome.getContentPane().add(txtrCoursesOffered);
 		
-//		frmLogin.getContentPane().setBackground(Color.NONE);
-		frmLogin.setBackground(Color.PINK);
-		frmLogin.setBounds(100, 100, 450, 450);
-		frmLogin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frmLogin.getContentPane().setLayout(null);
+		JLabel lblWelcomeToGatwe = new JLabel("WELCOME TO ST PHILIPS HOSTEL MANAGEMENT SYSTEM");
+		lblWelcomeToGatwe.setBackground(Color.BLUE);
+		lblWelcomeToGatwe.setForeground(Color.WHITE);
+		lblWelcomeToGatwe.setFont(new Font("Z003", Font.BOLD | Font.ITALIC, 25));
+		lblWelcomeToGatwe.setBounds(24, 12, 714, 51);
+		frmHome.getContentPane().add(lblWelcomeToGatwe);
 		
-		JLabel lblUsername = new JLabel("Username");
-		lblUsername.setFont(new Font("eufm10", Font.BOLD | Font.ITALIC, 26));
-		lblUsername.setBounds(156, 27, 126, 33);
-		frmLogin.getContentPane().add(lblUsername);
-		
-		textField = new JTextField();
-		textField.setBounds(115, 72, 212, 44);
-		frmLogin.getContentPane().add(textField);
-		textField.setColumns(10);
-		
-		JLabel lblPassword = new JLabel("Password");
-		lblPassword.setFont(new Font("FreeSans", Font.BOLD | Font.ITALIC, 20));
-		lblPassword.setBounds(172, 128, 102, 23);
-		frmLogin.getContentPane().add(lblPassword);
-		
-		 check = new JCheckBox("show");
-		check.addActionListener(new ActionListener() {
+		JToggleButton tglbtnContinue = new JToggleButton("NEXT");
+		tglbtnContinue.setIcon(new ImageIcon("/home/ramsey/eclipse-workspace/HOSTLE MANAGEMENT SYSTEM/HOSTEL-MANAGEMENT SYSTEM1/icons/right.png"));
+		tglbtnContinue.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if(check.isSelected()) {
-					passwordField.setEchoChar((char)0);
-				}
-				else {
-					passwordField.setEchoChar(('*'));
-				}
+				Login lg = new Login();
+				lg.show();
+				frmHome.setVisible(false);
 			}
 		});
-		check.setBounds(215, 210, 63, 44);
-		frmLogin.getContentPane().add(check);
+		tglbtnContinue.setBackground(Color.MAGENTA);
+		tglbtnContinue.setBounds(603, 412, 167, 32);
+		frmHome.getContentPane().add(tglbtnContinue);
 		
-		JButton btnLogin = new JButton("LOGIN");
-		btnLogin.setIcon(null);
-		btnLogin.setForeground(Color.WHITE);
-		btnLogin.setBackground(Color.RED);
-		btnLogin.setFont(new Font("DialogInput", Font.BOLD | Font.ITALIC, 17));
-		btnLogin.setBounds(166, 282, 134, 53);
-		btnLogin.addActionListener(object->{
-			try {
-				Check();
-				
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-		});
-		frmLogin.getContentPane().add(btnLogin);
+		JLabel lblNewLabel = new JLabel("New label");
+		lblNewLabel.setIcon(new ImageIcon("/home/ramsey/eclipse-workspace/HOSTLE MANAGEMENT SYSTEM/HOSTEL-MANAGEMENT SYSTEM1/icons/employees.jpeg"));
+		lblNewLabel.setBounds(298, 70, 224, 156);
+		frmHome.getContentPane().add(lblNewLabel);
 		
-		passwordField = new JPasswordField();
-		passwordField.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				try {
-					Check();
-				}catch(Exception e ){}
-			}
-		});
-		passwordField.setBounds(115, 163, 236, 39);
-		frmLogin.getContentPane().add(passwordField);
+		JLabel lblNewLabel_1 = new JLabel("EMPLOYEES");
+		lblNewLabel_1.setFont(new Font("Dialog", Font.BOLD | Font.ITALIC, 22));
+		lblNewLabel_1.setBounds(308, 238, 224, 32);
+		frmHome.getContentPane().add(lblNewLabel_1);
 		
-		JLabel lblNewLabel_1 = new JLabel("New label");
-		lblNewLabel_1.setIcon(new ImageIcon("/home/ramsey/eclipse-workspace/HOSTLE MANAGEMENT SYSTEM/HOSTEL MANAGEMENT SYSTEM/icons/login.jpg"));
-		lblNewLabel_1.setBounds(-124, 12, 562, 396);
-		lblNewLabel_1.setVisible(true);
-		frmLogin.getContentPane().add(lblNewLabel_1);
-		lblNewLabel_1.setVisible(true);
+		JLabel lblNewLabel_2 = new JLabel("New label");
+		lblNewLabel_2.setIcon(new ImageIcon("/home/ramsey/eclipse-workspace/HOSTLE MANAGEMENT SYSTEM/HOSTEL-MANAGEMENT SYSTEM1/icons/index.png"));
+		lblNewLabel_2.setBounds(298, 277, 224, 156);
+		frmHome.getContentPane().add(lblNewLabel_2);
 		
+		JLabel lblNewLabel_3 = new JLabel("New label");
+		lblNewLabel_3.setIcon(new ImageIcon("/home/ramsey/eclipse-workspace/HOSTLE MANAGEMENT SYSTEM/HOSTEL-MANAGEMENT SYSTEM1/icons/staff2.jpg"));
+		lblNewLabel_3.setBounds(534, 70, 270, 330);
+		frmHome.getContentPane().add(lblNewLabel_3);
 		
+		JLabel lblNewLabel_4 = new JLabel("STUDENT");
+		lblNewLabel_4.setFont(new Font("eufm10", Font.BOLD, 21));
+		lblNewLabel_4.setBounds(282, 421, 240, 51);
+		frmHome.getContentPane().add(lblNewLabel_4);
+		
+		;
 	}
 
 	public void show() {
 		// TODO Auto-generated method stub
-	frmLogin.setVisible(true);
+		frmHome.setVisible(true);
 	}
 }
+

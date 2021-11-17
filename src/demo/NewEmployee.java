@@ -7,6 +7,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import java.awt.BorderLayout;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
 import javax.swing.JComboBox;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
@@ -17,7 +18,7 @@ import java.awt.Color;
 import java.awt.Font;
 import javax.swing.DefaultComboBoxModel;
 
-public class NewEmployee extends HOME{
+public class NewEmployee extends Login{
 
 	private JFrame frmNewEmployee;
 	private JTextField fdphone;
@@ -50,6 +51,7 @@ public class NewEmployee extends HOME{
 		frmNewEmployee = new JFrame();
 		frmNewEmployee.setTitle("NEW EMPLOYEE");
 		frmNewEmployee.getContentPane().setBackground(Color.LIGHT_GRAY);
+		frmNewEmployee.getContentPane().setBackground(UIManager.getColor("OptionPane.questionDialog.border.background"));
 		frmNewEmployee.setBounds(200, 200, 550, 500);
 		frmNewEmployee.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmNewEmployee.getContentPane().setLayout(null);

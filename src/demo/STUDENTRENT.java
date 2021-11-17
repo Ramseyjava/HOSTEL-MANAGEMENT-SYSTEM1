@@ -35,6 +35,7 @@ public class STUDENTRENT {
 	private JTextField fdAmount;
 	private JTextField fldDate;
 	public JTextArea textArea_1;
+	private JTextField fldrent;
 
 
 	/**
@@ -54,9 +55,10 @@ public class STUDENTRENT {
 		frmStudentFeesLent.getContentPane().setFont(new Font("Dialog", Font.PLAIN, 12));
 		frmStudentFeesLent.getContentPane().setBackground(Color.DARK_GRAY);
 		frmStudentFeesLent.setTitle("STUDENT FEES/ LENT");
-		frmStudentFeesLent.setBounds(200, 200, 600, 450);
+		frmStudentFeesLent.setBounds(200, 200, 680, 500);
 		frmStudentFeesLent.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmStudentFeesLent.getContentPane().setLayout(null);
+		
 		SimpleDateFormat dfrt = new SimpleDateFormat("yyyy/MM/dd");
 		Date df = new Date();
 		Calendar c = Calendar.getInstance();
@@ -99,6 +101,7 @@ public class STUDENTRENT {
 		frmStudentFeesLent.getContentPane().add(btnAmount);
 		
 		JButton btnExit = new JButton("Exit");
+		btnExit.setBackground(Color.RED);
 		btnExit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				int a=JOptionPane.showConfirmDialog(null, "do what to Exit application", "select", JOptionPane.YES_NO_OPTION);
@@ -111,10 +114,11 @@ public class STUDENTRENT {
 			}
 			
 		});
-		btnExit.setBounds(508, 12, 80, 35);
+		btnExit.setBounds(588, 12, 80, 35);
 		frmStudentFeesLent.getContentPane().add(btnExit);
 		
 		JButton btnSave = new JButton("Save");
+		btnSave.setBackground(Color.GREEN);
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
@@ -126,10 +130,11 @@ public class STUDENTRENT {
 			}
 			
 		});
-		btnSave.setBounds(227, 373, 117, 35);
+		btnSave.setBounds(357, 423, 117, 35);
 		frmStudentFeesLent.getContentPane().add(btnSave);
 		
 		JButton btnDelete = new JButton("Delete");
+		btnDelete.setBackground(Color.RED);
 		btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				 fldmobile.setText(null);
@@ -139,9 +144,11 @@ public class STUDENTRENT {
 				 fdMonth.setText(null);
 				 fdAmount.setText(null);
 				 fldDate.setText(null);
+				 fldmobile.requestFocus();
+				 textArea_1.setText(null);
 			}
 		});
-		btnDelete.setBounds(436, 373, 117, 35);
+		btnDelete.setBounds(551, 423, 117, 35);
 		frmStudentFeesLent.getContentPane().add(btnDelete);
 		
 		fldmobile = new JTextField();
@@ -189,11 +196,11 @@ public class STUDENTRENT {
 					while(rs.next())
 					{
 						fldmobile.setEditable(false);
-						fdName.setText(rs.getString(2));
-						fdemail.setText(rs.getString(3));
-						fdroom.setText(rs.getString(4));
-//						fdMonth.setText(rs.getString(5));
-//						fdAmount.setText(rs.getString(6));
+						fdName.setText(rs.getString(3));
+						fdemail.setText(rs.getString(4));
+						fdroom.setText(rs.getString(5));
+						fdMonth.setText(rs.getString(6));
+						fdAmount.setText(rs.getString(7));
 					}
 				}catch(Exception e) {}
 				fldmobile.requestFocus();
@@ -209,14 +216,14 @@ public class STUDENTRENT {
 		JButton btnDate = new JButton("Date ");
 		
 		btnDate.setFont(new Font("eufm10", Font.BOLD, 23));
-		btnDate.setBounds(12, 326, 117, 35);
+		btnDate.setBounds(12, 376, 117, 35);
 		frmStudentFeesLent.getContentPane().add(btnDate);
 		
 		fldDate = new JTextField();
 		fldDate.setText(currentDate);
 		fldDate.setEditable(false);
 		fldDate.setColumns(10);
-		fldDate.setBounds(162, 333, 206, 27);
+		fldDate.setBounds(162, 381, 206, 27);
 		frmStudentFeesLent.getContentPane().add(fldDate);
 		
 		JTextArea textArea = new JTextArea();
@@ -226,15 +233,61 @@ public class STUDENTRENT {
 		textArea_1 = new JTextArea();
 		textArea_1.setForeground(Color.GREEN);
 		textArea_1.setBackground(Color.BLACK);
-		textArea_1.setBounds(380, 67, 208, 294);
+		textArea_1.setBounds(380, 67, 288, 330);
 		frmStudentFeesLent.getContentPane().add(textArea_1);
+		
+		JButton btnFees = new JButton("Rent");
+		btnFees.setFont(new Font("eufm10", Font.BOLD, 21));
+		btnFees.setBounds(12, 318, 117, 35);
+		frmStudentFeesLent.getContentPane().add(btnFees);
+		
+		fldrent = new JTextField();
+		fldrent.setText("10,000 /=per semister");
+		fldrent.setColumns(10);
+		fldrent.setBounds(162, 323, 206, 27);
+		frmStudentFeesLent.getContentPane().add(fldrent);
+		
+		JButton btnUpdate = new JButton("Update");
+		btnUpdate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Connection con;
+				try {
+					con=Connector.getConnection();
+					PreparedStatement pst =con.prepareStatement("update rent set emailno=?, roomno=?,month=?,Amount=?,rent=? where mobile="+fldmobile.getText());
+					pst.setString(1, fdemail.getText());
+					pst.setString(2, fdroom.getText());
+					pst.setString(3, fdMonth.getText());
+					pst.setString(4, fdAmount.getText());
+					pst.setString(5, fldrent.getText());
+					pst.executeUpdate();
+					int i=pst.executeUpdate();
+					if(i>0) {
+						JOptionPane.showMessageDialog(null, "succefuly updated");
+						ShowResult();
+					}else
+					{
+						JOptionPane.showMessageDialog(null, "errror updating!!!");
+					}
+					
+					
+				}catch(Exception e) {}
+			}
+		});
+		btnUpdate.setBackground(Color.PINK);
+		btnUpdate.setBounds(195, 423, 117, 35);
+		frmStudentFeesLent.getContentPane().add(btnUpdate);
+		
+		JButton btnRentReport = new JButton("Rent report");
+		btnRentReport.setBackground(Color.MAGENTA);
+		btnRentReport.setBounds(445, 12, 117, 35);
+		frmStudentFeesLent.getContentPane().add(btnRentReport);
 	}
 	private void insert() throws Exception{
 		Connection conn;
 		PreparedStatement ps;
 		try  {
 			conn = Connector.getConnection();
-		String sql = "insert into rent (mobile,studentName,emailNo,roomNo,month,Amount,Date) values(?,?,?,?,?,?,?)";
+		String sql = "insert into rent (mobile,studentName,emailNo,roomNo,month,Amount,rent,Date) values(?,?,?,?,?,?,?,?)";
 		ps = conn.prepareStatement(sql);
 		ps.setInt(1, Integer.parseInt(fldmobile.getText()));
 		ps.setString(2, fdName.getText());
@@ -242,7 +295,8 @@ public class STUDENTRENT {
 		ps.setString(4, fdroom.getText());
 		ps.setString(5, fdMonth.getText());
 		ps.setString(6, fdAmount.getText());
-		ps.setString(7, fldDate.getText());
+		ps.setString(7, fldrent.getText());
+		ps.setString(8, fldDate.getText());
 //		textArea_1.setText("Name: "+);
 		
 		int i =ps.executeUpdate();
@@ -265,7 +319,7 @@ public class STUDENTRENT {
 			Statement stm = con.createStatement();
 			ResultSet rs = stm.executeQuery("select * from rent");
 			while(rs.next()) {
-			textArea_1.setText("NAME:"+"\t"+rs.getString(3)+"\n"+ "EMAIL:"+"\t"+rs.getString(4) +"\n"+"ROOM:"+"\t"+rs.getString(5)+"\n"+"SEMESTER: \t"+rs.getString(6));
+			textArea_1.setText("NAME:"+"\t"+rs.getString(3)+"\n"+ "EMAIL:"+"\t"+rs.getString(4) +"\n"+"ROOM:"+"\t"+rs.getString(5)+"\n"+"SEMESTER: \t"+rs.getString(6)+"\n"+"AMOUNT PAYED:"+"\t"+rs.getString(7)+"\n"+"RENT:"+"\t"+rs.getString(8)+"\n"+"CURRENT DATE:"+"\t"+rs.getString(9));
 //				textArea_1.setText(rs.getString(4));
 ////				textArea_1.setText(rs.getString(5));
 //				textArea_1.setText(rs.getString(6));

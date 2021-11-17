@@ -18,10 +18,17 @@ import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import java.awt.Color;
 import javax.swing.JTextField;
+import javax.swing.JToggleButton;
+import javax.swing.UIManager;
+import javax.swing.border.TitledBorder;
 import javax.swing.JCheckBox;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JPasswordField;
+import javax.swing.ImageIcon;
+import javax.swing.JPanel;
+import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
 
 public class HOSTELSETTING  extends javax.swing.JFrame{
 
@@ -37,6 +44,7 @@ public class HOSTELSETTING  extends javax.swing.JFrame{
 	private JButton btnRegister;
 	private JLabel lblNewLabel;
 	private JLabel lblNewLabel_1;
+	int i;
 	String password,correct;
 	private JLabel lblNewLabel_3;
 	private JTextField textField;
@@ -44,6 +52,7 @@ public class HOSTELSETTING  extends javax.swing.JFrame{
 	private JPasswordField passwordField;
 	private JPasswordField passwordField_1;
 	protected JFrame frmLogin;
+	private JPanel panel_2;
 
 	/**
 	 * Launch the application.
@@ -99,17 +108,18 @@ public class HOSTELSETTING  extends javax.swing.JFrame{
 		frmAllStudentLiving.getContentPane().add(flRegestration);
 		
 		JButton btnSalary = new JButton("Search");
-		
-		btnSalary.addActionListener(object->{
-			 try {
-				Search();
+		btnSalary.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+					Search();
+				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				textField.requestFocus();
-			} catch (ClassNotFoundException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (Exception e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
 			}
 		});
 		btnSalary.setBackground(Color.MAGENTA);
@@ -195,10 +205,16 @@ public class HOSTELSETTING  extends javax.swing.JFrame{
 		btnCancel = new JButton("Delete");
 		btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				String user = textField.getText();
 				try {
+					
 					Connection conn = Connector.getConnection();
 					Statement st = conn.createStatement();
-					int i=st.executeUpdate("delete from users where id= "+textField.getText());
+					
+					st.executeUpdate("delete from users where username= "+textField.getText());
+					
+					
+					int i= st.executeUpdate(user);
 					if(i>0) {
 						JOptionPane.showMessageDialog(null, "Deleted Succefull!!");
 						clear();
@@ -208,7 +224,9 @@ public class HOSTELSETTING  extends javax.swing.JFrame{
 						JOptionPane.showMessageDialog(null, JOptionPane.ERROR_MESSAGE);
 						clear();
 					}
-				}catch(Exception e) {}
+				}catch(Exception e) {
+					e.printStackTrace();
+				}
 			}
 		});
 		btnCancel.setBackground(Color.RED);
@@ -223,8 +241,10 @@ public class HOSTELSETTING  extends javax.swing.JFrame{
 			public void actionPerformed(ActionEvent arg0) {
 				try {
 					isValidPassword("String password");
+					insertp();
 					smartinsert();
-					JOptionPane.showMessageDialog(null,"Succefull Registration");
+					
+					
 					Connection conn= Connector.getConnection();
 					Statement st = conn.createStatement();
 					ResultSet rs = st.executeQuery("select * from users");
@@ -235,7 +255,8 @@ public class HOSTELSETTING  extends javax.swing.JFrame{
 					
 					}			
 					clear();
-					textField.setRequestFocusEnabled(true);
+					textField.setText(null);
+					textField.requestFocus();
 				} catch (ClassNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -259,7 +280,7 @@ public class HOSTELSETTING  extends javax.swing.JFrame{
 		lblNewLabel_1.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				HOME hm = new HOME();
+				Login hm = new Login();
 				hm.show();
 				frmAllStudentLiving.setVisible(false);
 				DASHBOARD DC = new DASHBOARD();
@@ -299,6 +320,7 @@ public class HOSTELSETTING  extends javax.swing.JFrame{
 		textField_1.setBounds(456, 128, 202, 56);
 		frmAllStudentLiving.getContentPane().add(textField_1);
 		textField_1.setColumns(10);
+
 		
 		passwordField = new JPasswordField();
 		passwordField.setBounds(202, 351, 230, 36);
@@ -307,14 +329,49 @@ public class HOSTELSETTING  extends javax.swing.JFrame{
 		passwordField_1 = new JPasswordField();
 		passwordField_1.setBounds(202, 413, 230, 36);
 		frmAllStudentLiving.getContentPane().add(passwordField_1);
+		
+		JLabel lblNewLabel_4 = new JLabel("New label");
+		lblNewLabel_4.setIcon(new ImageIcon("/home/ramsey/eclipse-workspace/HOSTLE MANAGEMENT SYSTEM/HOSTEL-MANAGEMENT SYSTEM1/icons/register.png"));
+		lblNewLabel_4.setBounds(-20, 567, 232, 231);
+		frmAllStudentLiving.getContentPane().add(lblNewLabel_4);
+		
+		JPanel panel = new JPanel();
+		panel.setBackground(Color.WHITE);
+		panel.setBorder(new TitledBorder(new LineBorder(new Color(184, 207, 229)), "MAINTENANCE", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+		panel.setBounds(444, 207, 232, 155);
+//		panel.setBorder((Border) Color.blue);
+	
+		frmAllStudentLiving.getContentPane().add(panel);
+		panel.setLayout(null);
+		
+		JLabel lblNewLabel_5 = new JLabel("New label");
+		lblNewLabel_5.setIcon(new ImageIcon("/home/ramsey/eclipse-workspace/HOSTLE MANAGEMENT SYSTEM/HOSTEL-MANAGEMENT SYSTEM1/icons/school.png"));
+		lblNewLabel_5.setBounds(12, 12, 208, 131);
+		panel.add(lblNewLabel_5);
+		
+		JPanel panel_1 = new JPanel();
+//		panel_1.setBorder(new TitledBorder(null,"FINANCE/ACCOUNTING" TitledBorder.LEADING, TitledBorder.TOP ,null));
+		panel_1.setBorder( new TitledBorder(null,"FINANCE/ACCOUNTING" ,TitledBorder.LEADING,TitledBorder.TOP));
+		panel_1.setBounds(444, 427, 244, 165);
+		frmAllStudentLiving.getContentPane().add(panel_1);
+		
+		JLabel lblNewLabel_6 = new JLabel("New label");
+		lblNewLabel_6.setIcon(new ImageIcon("/home/ramsey/eclipse-workspace/HOSTLE MANAGEMENT SYSTEM/HOSTEL-MANAGEMENT SYSTEM1/icons/admins.jpeg"));
+		panel_1.add(lblNewLabel_6);
+		
+		panel_2 = new JPanel();
+		panel_2.setBackground(Color.RED);
+		panel_2.setBounds(12, 5, 597, 56);
+		frmAllStudentLiving.getContentPane().add(panel_2);
 	}
 	private void deleteShow() throws Throwable {
 		Connection conn;
 		Statement st;
+		String user =textField.getText(); 
 		try {
           conn = Connector.getConnection();
           st =conn.createStatement();
-          st.executeUpdate("delete from users where username= "+textField);
+          st.executeUpdate("delete from users where username="+user+"'");
           
 
 		}catch(SQLException e) {}
@@ -326,15 +383,19 @@ public class HOSTELSETTING  extends javax.swing.JFrame{
 		PreparedStatement pst;
 		try {
 			conn=Connector.getConnection();
-			String sql1= "select * from users where username=? and password=?";
-			pst= conn.prepareStatement(sql1);
-			ResultSet rs = pst.executeQuery();
-			String user=fldUname.getText();
-			if(rs.next()) {
-//				
-				if(rs.getString('1').equals(user) || rs.getString('2').equals(password)); 
-				JOptionPane.showMessageDialog(null, "Username and password are already used!!!","" +"\n"+ "Try again please!.", getDefaultCloseOperation() );
-			}else {
+//			String sql1= "select * from users where username=? and password=?";
+//			pst= conn.prepareStatement(sql1);
+//			ResultSet rs = pst.executeQuery();
+//			String user=fldUname.getText();
+//			if(rs.next()) {
+//				if(rs.getString('1').equals(user) || rs.getString('2').equals(password)); 
+//				{
+//					JOptionPane.showMessageDialog(null, "Username and password are already used!!!","" +"\n"+ "Try again please!.", getDefaultCloseOperation() );
+//				} 
+//	
+//			}
+			
+				
 				conn = Connector.getConnection();
 				String sql ="insert into users (username,password,role,firstName,lastName,DateOfBirth,Email)values(?,?,?,?,?,?,?)";
 				  String password = Confirm(passwordField.getText(),passwordField_1.getText());
@@ -346,12 +407,19 @@ public class HOSTELSETTING  extends javax.swing.JFrame{
 				pst.setString(5, fldLname.getText());
 				pst.setString(6, fldDBT.getText());
 				pst.setString(7, fldemail.getText());
-				pst.execute();
+//			    pst.executeUpdate();
+			
+			
+			i=pst.executeUpdate();
+			if(i>0) {
+				JOptionPane.showMessageDialog(null, "Succefull inserted!!");
 			}
-		
-//		JOptionPane.showMessageDialog(null, "Succefull inserted!!");
-	
-		}catch(Exception e) {
+			else {
+				JOptionPane.showInputDialog(password);
+				}	
+			
+		}
+			 catch(Exception e) {
 		e.printStackTrace();
 		
 		}
@@ -380,13 +448,13 @@ private void clear()
 		conn = Connector.getConnection();
 
 		String user = textField.getText();
-		String sql="Select * from users where username= " + user;
+//		String sql="Select * from users where username= ?";
 		
 		PreparedStatement pst;
-		pst=conn.prepareStatement(sql);
-
+		pst=conn.prepareStatement("select * from users where username= ?");
+		pst.setString(1,textField.getText());
 		ResultSet rs=pst.executeQuery();
-		pst.setString(1,fldFname.getText());
+		
 		while(rs.next()) {
 			fldUname.setText(rs.getString(1));
 			passwordField.setText(rs.getString(2));
@@ -435,5 +503,24 @@ public  boolean isValidPassword(String password) throws SQLException, ClassNotFo
 	}
 	return isValid=true;
 	
+}
+private void insertp()throws Exception, ClassNotFoundException{
+	Connection conn;
+	PreparedStatement pst;
+try {
+	conn=Connector.getConnection();
+	String sql1= "select * from users where username=? and password=?";
+	pst= conn.prepareStatement(sql1);
+	ResultSet rs = pst.executeQuery();
+	String user=fldUname.getText();
+	if(rs.next()) {
+		if(rs.getString('1').equals(user) || rs.getString('2').equals(password)); 
+		{
+			JOptionPane.showMessageDialog(null, "Username and password are already used!!!","" +"\n"+ "Try again please!.", getDefaultCloseOperation() );
+		} 
+
+	}
+	
+}catch(Exception e) {}
 }
 }
